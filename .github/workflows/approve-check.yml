@@ -34,13 +34,6 @@ jobs:
             if (!approvedByOzgursc) {
               throw new Error('This PR must be approved by @emrcelen before merging.');
             } else {
-              console.log('PR is approved by @emrcelen.');
-            }
-            
-      - name: Report Status to GitHub
-        uses: actions/github-script@v6
-        with:
-          script: |
             const pullNumber = context.payload.pull_request.number;
             await github.rest.repos.createCommitStatus({
             owner: context.repo.owner,
@@ -50,7 +43,9 @@ jobs:
             context: 'approval-check',
             description: 'Approval check completed successfully.',
             });
-      
+              console.log('PR is approved by @emrcelen.');
+            }
+            
       - name: Success Message
         if: success()
         run: echo "PR is approved by @emrcelen. Ready to merge!"
