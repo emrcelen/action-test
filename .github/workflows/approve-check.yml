@@ -22,12 +22,12 @@ jobs:
             });
 
             const approvedByOzgursc = reviews.data.some(
-              review => review.user.login === 'ozgursc' && review.state === 'APPROVED'
+              review => review.user.login === 'emrcelen' && review.state === 'APPROVED'
             );
 
             if (!approvedByOzgursc) {
-              throw new Error('This PR must be approved by @ozgursc before merging.');
+              throw new Error('This PR must be approved by @emrcelen before merging.');
             }
 
       - name: Success Message
-        run: echo "PR is approved by @ozgursc. Ready to merge!"
+        run: echo "PR is approved by @emrcelen. Ready to merge!"
