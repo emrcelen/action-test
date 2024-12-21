@@ -1,0 +1,33 @@
+name: Enforce PR Approval by ozgursc
+
+on:
+  pull_request:
+    branches:
+      - test
+      - main
+
+jobs:
+  check-approval:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check if PR is approved by ozgursc
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const reviews = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+
+            const approvedByOzgursc = reviews.data.some(
+              review => review.user.login === 'emrcelen' && review.state === 'APPROVED'
+            );
+
+            if (!approvedByOzgursc) {
+              throw new Error('This PR must be approved by @emrcelen before merging.');
+            }
+
+      - name: Success Message
+        run: echo "PR is approved by @emrcelen. Ready to merge!"
