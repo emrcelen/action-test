@@ -5,16 +5,18 @@ on:
     branches:
       - test
       - main
+
 permissions:
   pull-requests: write
   contents: read
-  
+
 jobs:
   check-approval:
     runs-on: ubuntu-latest
-  
+
     steps:
       - name: Check if PR is approved by ozgursc
+        id: approval-check  # Explicit step ID
         uses: actions/github-script@v6
         with:
           script: |
@@ -25,12 +27,15 @@ jobs:
             });
 
             const approvedByOzgursc = reviews.data.some(
-              review => review.user.login === 'emrcelen' && review.state === 'APPROVED'
+              review => review.user?.login === 'emrcelen' && review.state === 'APPROVED'
             );
 
             if (!approvedByOzgursc) {
               throw new Error('This PR must be approved by @emrcelen before merging.');
+            } else {
+              console.log('PR is approved by @emrcelen.');
             }
 
       - name: Success Message
+        if: success()
         run: echo "PR is approved by @emrcelen. Ready to merge!"
