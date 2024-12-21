@@ -35,7 +35,21 @@ jobs:
             } else {
               console.log('PR is approved by @emrcelen.');
             }
-
+            
+      - name: Report Status to GitHub
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pullNumber = context.payload.pull_request.number;
+            await github.rest.repos.createCommitStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            sha: context.payload.pull_request.head.sha,
+            state: 'success',
+            context: 'approval-check',
+            description: 'Approval check completed successfully.',
+            });
+      
       - name: Success Message
         if: success()
         run: echo "PR is approved by @emrcelen. Ready to merge!"
