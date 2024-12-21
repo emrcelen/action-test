@@ -5,11 +5,14 @@ on:
     branches:
       - test
       - main
-
+permissions:
+  pull-requests: write
+  contents: read
+  
 jobs:
   check-approval:
     runs-on: ubuntu-latest
-
+  
     steps:
       - name: Check if PR is approved by ozgursc
         uses: actions/github-script@v6
